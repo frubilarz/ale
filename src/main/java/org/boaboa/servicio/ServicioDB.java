@@ -43,10 +43,10 @@ public class ServicioDB implements Serializable {
     boolean conectar() {
         this.conectado = false;
         try {
-            String url = "jdbc:mysql://127.0.0.1:3360/buticpatydb?zeroDateTimeBehavior=convertToNull";
+            String url = "jdbc:mysql://127.0.0.1:3306/buticpatydb?autoReconnect=true&useSSL=false";
             Properties props = new Properties();
-            props.setProperty("user", "root");
-            props.setProperty("password", "root");
+            props.setProperty("user", "butic");
+            props.setProperty("password", "butic+123");
 //            props.setProperty("ssl", "true");
             this.conexion = DriverManager.getConnection(url, props);
 
@@ -172,7 +172,7 @@ public boolean guardar(Usuario usuario) {
                 String query = "";
 
                 if (update) {
-                    query = "UPDATE usuarios SET nombre=?, rut=? ,telefono=?, correo=?, direccion=? "
+                    query = "UPDATE clientes SET nombre=?, rut=? ,telefono=?, correo=?, direccion=? "
                             + "WHERE id = ?";
                     st = conexion.prepareStatement(query);
                     st.setString(1, cliente.getNombre());
@@ -183,8 +183,10 @@ public boolean guardar(Usuario usuario) {
                     st.setInt(6, cliente.getId());
 
                 } else {
-                    query = "INSERT INTO usuarios (nombre, rut, telefono,correo,direccion)"
-                            + " VALUES (?, ?, ?, ?,?)";
+                    
+                    
+                    query = "INSERT INTO clientes (nombre,rut,telefono,correo,direccion)"
+                            + " VALUES (?,?,?,?,?)";
                     st = conexion.prepareStatement(query);
 
                     st.setString(1, cliente.getNombre());
@@ -192,6 +194,7 @@ public boolean guardar(Usuario usuario) {
                     st.setInt(3, cliente.getTelefono());
                     st.setString(4, cliente.getCorreo());
                     st.setString(5, cliente.getDireccion());
+                     Integer uno = 1;
                 }
                 if (st != null) {
                     logger.info(st.toString());
@@ -205,7 +208,7 @@ public boolean guardar(Usuario usuario) {
             }
 
         } catch (Exception e) {
-            salida = false;
+                salida = false;
             logger.debug("error : {}", e.toString(), e);
             logger.error("Error : {}", e.toString());
         }

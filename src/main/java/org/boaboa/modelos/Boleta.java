@@ -19,6 +19,16 @@ public class Boleta extends BaseBean{
     Date fecha = null;
     Double monto = null;
     Integer local_id = null;
+    Integer usuario_id = null;
+
+    public Integer getUsuario_id() {
+        return usuario_id;
+    }
+
+    public void setUsuario_id(Integer usuario_id) {
+        this.usuario_id = usuario_id;
+    }
+    
 
     public Boleta() {
     }

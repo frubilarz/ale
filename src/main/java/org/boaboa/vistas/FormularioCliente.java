@@ -15,15 +15,25 @@ import org.boaboa.utils.RutUtils;
  *
  * @author Alexandra Olivares Solis
  */
-public class CrearUsuario extends javax.swing.JFrame {
+public class FormularioCliente extends javax.swing.JFrame {
 
     /**
      * Creates new form CrearUsuario
      */
     Cliente cliente = new Cliente();
 
-    public CrearUsuario() {
+    public FormularioCliente() {
         initComponents();
+    }
+
+    FormularioCliente(Cliente c) {
+        initComponents();
+        this.cliente = c;
+        this.nombreField.setText(c.getNombre());
+        this.rutField.setText(RutUtils.formatear(c.getRut()));
+        this.telefonoField.setText(c.getTelefono().toString());
+        this.correoField.setText(c.getCorreo());
+        this.direccionField.setText(c.getDireccion());
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +57,7 @@ public class CrearUsuario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setText("CREAR USUARIO");
+        jLabel2.setText("CREAR CLIENTE");
 
         nombreLabel.setText("NOMBRE");
 
@@ -224,20 +234,20 @@ public class CrearUsuario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CrearUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormularioCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CrearUsuario().setVisible(true);
+                new FormularioCliente().setVisible(true);
             }
         });
     }

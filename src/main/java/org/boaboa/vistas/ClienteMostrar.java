@@ -5,7 +5,9 @@
  */
 package org.boaboa.vistas;
 
+import javax.swing.JOptionPane;
 import org.boaboa.modelos.Cliente;
+import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.RutUtils;
 
 /**
@@ -182,6 +184,19 @@ public class ClienteMostrar extends javax.swing.JFrame {
 
     private void EditarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarButtonActionPerformed
 
+        String rutString = this.AtributoRut.getText();
+        boolean rutBoolean = RutUtils.isRut(rutString);
+        if(rutBoolean){
+            Integer rut = RutUtils.parseRut(rutString);
+            ServicioDB servicioDB = new  ServicioDB();
+            FormularioCliente crearCliente = new FormularioCliente(c);
+            crearCliente.setVisible(true);
+            crearCliente.setLocationRelativeTo(null);
+            this.dispose();
+            
+        }
+        
+        
     }//GEN-LAST:event_EditarButtonActionPerformed
 
     /**
