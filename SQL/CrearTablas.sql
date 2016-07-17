@@ -108,6 +108,9 @@ CREATE TABLE IF NOT EXISTS `buticpatydb`.`carros_ventas` (
     FOREIGN KEY (producto_id) 
         REFERENCES productos(id)
         ON DELETE CASCADE,
+        FOREIGN KEY (boleta_id) 
+        REFERENCES boletas(id)
+        ON DELETE CASCADE,
     cantidad int default 0 not null,
     valor int default 0 not null,
   PRIMARY KEY (`id`)
