@@ -7,6 +7,7 @@ package org.boaboa.vistas;
 
 import javax.swing.JOptionPane;
 import org.boaboa.modelos.Usuario;
+import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.RutUtils;
 import org.boaboa.utils.SecurityUtils;
 
@@ -16,11 +17,24 @@ import org.boaboa.utils.SecurityUtils;
  */
 public class FormularioUsuario extends javax.swing.JFrame {
 
+    Usuario usuarioFormulario;
+
     /**
      * Creates new form formularioUsuario
      */
     public FormularioUsuario() {
         initComponents();
+    }
+
+    FormularioUsuario(Usuario usuario) {
+        initComponents();
+        if (usuario != null) {
+            usuarioFormulario = usuario;
+            this.nombreField.setText(usuarioFormulario.getNombre().toString());
+            if (usuarioFormulario.getRut() != null) {
+                this.rutField.setText(RutUtils.formatear(usuarioFormulario.getRut()));
+            }
+        }
     }
 
     /**
@@ -69,6 +83,11 @@ public class FormularioUsuario extends javax.swing.JFrame {
         guardarButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 guardarButtonMouseClicked(evt);
+            }
+        });
+        guardarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarButtonActionPerformed(evt);
             }
         });
 
@@ -195,34 +214,46 @@ public class FormularioUsuario extends javax.swing.JFrame {
         String clave = new String(palabra);
         String clave2 = new String(palabra2);
         if (clave.equals(clave2)) {
-            
-                    if(nombre.length()*rutString.length()*clave.length() !=0){
-                        Integer rutInteger = RutUtils.parseRut(rutString);
-                        if(rutInteger!= null){
-                            Usuario usuario = new Usuario();
-                            usuario.setNombre(nombre);
-                            usuario.setRol(rol);
-                            usuario.setRut(rutInteger);
-                            usuario.setClave(SecurityUtils.sha256(clave));
-                            
-                            JOptionPane.showMessageDialog(rootPane,"se guardara un usuario nuevo");
-                            MenuPrincipal menuPrincipal = new MenuPrincipal();
-                            menuPrincipal.setVisible(true);
-                            menuPrincipal.setLocationRelativeTo(null);
-                            this.dispose();
-                        }else{
-                            JOptionPane.showMessageDialog(rootPane, "RUT invalido");
-                        }
-                    }else{
-                        JOptionPane.showMessageDialog(rootPane,"Todos los campos son obligatorios");
-                    }
-        }else{
-            JOptionPane.showMessageDialog(rootPane,"Las claves no son iguales");
-        }
+            if (nombre.length() * rutString.length() * clave.length() != 0) {
+                Integer rutInteger = RutUtils.parseRut(rutString);
+                if (rutInteger != null) {
 
+                    usuarioFormulario.setNombre(nombre);
+                    if (rol.equals("Administrador")) {
+                        rol = "admin";
+                    }
+                    usuarioFormulario.setRol(rol);
+                    if (usuarioFormulario.getId() == null) {
+                        usuarioFormulario.setRut(rutInteger);
+                    }
+                    usuarioFormulario.setClave(SecurityUtils.sha256(clave));
+                    ServicioDB servicioDB = new ServicioDB();
+                    boolean salida = servicioDB.guardar(usuarioFormulario);
+                    if (salida) {
+                        JOptionPane.showMessageDialog(rootPane, "se guardara un usuario nuevo");
+                        MenuPrincipal menuPrincipal = new MenuPrincipal();
+                        menuPrincipal.setVisible(true);
+                        menuPrincipal.setLocationRelativeTo(null);
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "Noo se guardaron los datos del usuario");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "RUT invalido");
+                }
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Todos los campos son obligatorios");
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Las claves no son iguales");
+        }
 
 // TODO add your handling code here:
     }//GEN-LAST:event_guardarButtonMouseClicked
+
+    private void guardarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_guardarButtonActionPerformed
 
     /**
      * @param args the command line arguments

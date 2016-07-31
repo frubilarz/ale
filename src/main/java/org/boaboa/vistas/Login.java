@@ -143,12 +143,11 @@ public class Login extends javax.swing.JFrame {
                         MenuPrincipal menuPrincipal = new MenuPrincipal(respuesta);
                         menuPrincipal.setVisible(true);
                         menuPrincipal.setLocationRelativeTo(null);
-                    }else{
+                        this.dispose();
+                    } else {
                         JOptionPane.showMessageDialog(rootPane, "Clave no cohincide");
                     }
                 }
-
-                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(rootPane, "RUT ingresado no es valido");
             }

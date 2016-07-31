@@ -5,6 +5,7 @@
  */
 package org.boaboa.vistas;
 
+import javax.swing.JOptionPane;
 import org.boaboa.modelos.Usuario;
 
 /**
@@ -13,15 +14,18 @@ import org.boaboa.modelos.Usuario;
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
+    Usuario usuarioMenu = null;
+
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
         initComponents();
     }
-    
-    public MenuPrincipal(Usuario usuario){
+
+    public MenuPrincipal(Usuario usuario) {
         initComponents();
+        usuarioMenu = usuario;
         this.nombreLabel.setText(usuario.getNombre());
     }
 
@@ -43,8 +47,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
-        jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
+        jMenu9 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,24 +131,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenu7.setText("CREAR USUARIO");
-        jMenu7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu7MouseClicked(evt);
-            }
-        });
-        jMenu7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu7ActionPerformed(evt);
-            }
-        });
-        jMenu7.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jMenu7KeyPressed(evt);
-            }
-        });
-        jMenu6.add(jMenu7);
-
         jMenu8.setText("BUSCAR USUARIO");
         jMenu8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -158,6 +145,33 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu6.add(jMenu8);
 
         jMenuBar1.add(jMenu6);
+
+        jMenu7.setText("Venta");
+        jMenu7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu7MouseClicked(evt);
+            }
+        });
+        jMenu7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu7ActionPerformed(evt);
+            }
+        });
+
+        jMenu9.setText("Venta");
+        jMenu9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu9MouseClicked(evt);
+            }
+        });
+        jMenu9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu9ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenu9);
+
+        jMenuBar1.add(jMenu7);
 
         setJMenuBar(jMenuBar1);
 
@@ -205,7 +219,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu3ActionPerformed
 
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
-        FormularioCliente crearUsuario = new FormularioCliente();
+        FormularioCliente crearUsuario = new FormularioCliente(usuarioMenu);
         crearUsuario.setVisible(true);
         crearUsuario.setLocationRelativeTo(null);
         this.dispose();
@@ -249,19 +263,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jMenu5MouseClicked
 
-    private void jMenu7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu7MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu7MouseClicked
-
-    private void jMenu7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu7ActionPerformed
-
-    private void jMenu7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jMenu7KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu7KeyPressed
-
     private void jMenu8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu8MouseClicked
+
+        if (usuarioMenu != null) {
+            if (usuarioMenu.getRol().equals("admin")) {
+                BuscarRutUsuario buscarRutUsuario = new BuscarRutUsuario();
+                buscarRutUsuario.setVisible(true);
+                buscarRutUsuario.setLocationRelativeTo(null);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "No eres un Usuario Administrador");
+            }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "No se puede ingresar No existe usuario Logeado");
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu8MouseClicked
 
@@ -276,6 +291,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu6ActionPerformed
+
+    private void jMenu7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu7MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu7MouseClicked
+
+    private void jMenu7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu7ActionPerformed
+
+    private void jMenu9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu9MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu9MouseClicked
+
+    private void jMenu9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,6 +353,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel nombreLabel;
     // End of variables declaration//GEN-END:variables

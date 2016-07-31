@@ -7,6 +7,7 @@ package org.boaboa.vistas;
 
 import javax.swing.JOptionPane;
 import org.boaboa.modelos.Cliente;
+import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
 import org.boaboa.utils.RutUtils;
@@ -21,7 +22,8 @@ public class FormularioCliente extends javax.swing.JFrame {
      * Creates new form CrearUsuario
      */
     Cliente cliente = new Cliente();
-
+    Usuario usuario = new Usuario();
+    
     public FormularioCliente() {
         initComponents();
     }
@@ -34,6 +36,11 @@ public class FormularioCliente extends javax.swing.JFrame {
         this.telefonoField.setText(c.getTelefono().toString());
         this.correoField.setText(c.getCorreo());
         this.direccionField.setText(c.getDireccion());
+    }
+
+    FormularioCliente(Usuario usuarioMenu) {
+        initComponents();
+        usuario = usuarioMenu;
     }
 
     @SuppressWarnings("unchecked")
