@@ -5,6 +5,12 @@
  */
 package org.boaboa.vistas;
 
+import javax.swing.JOptionPane;
+import org.apache.commons.lang.StringUtils;
+import org.boaboa.modelos.Producto;
+import org.boaboa.servicio.ServicioDB;
+import org.boaboa.utils.NumberUtils;
+
 /**
  *
  * @author frubilar
@@ -14,6 +20,10 @@ public class FormularioVenta extends javax.swing.JFrame {
     /**
      * Creates new form FormularioVenta
      */
+    Integer cantidad = 0;
+    Integer idProducto;
+    String nombreProducto;
+
     public FormularioVenta() {
         initComponents();
     }
@@ -53,6 +63,11 @@ public class FormularioVenta extends javax.swing.JFrame {
         jLabel3.setText("Cantidad");
 
         buscarButton.setText("Buscar");
+        buscarButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buscarButtonMouseClicked(evt);
+            }
+        });
 
         jLabel4.setText("Precio Unidad");
 
@@ -76,6 +91,11 @@ public class FormularioVenta extends javax.swing.JFrame {
         jButton2.setText("GUARDAR");
 
         jButton3.setText("ATRAS");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         ingresarButton.setText("Ingresar");
 
@@ -169,6 +189,36 @@ public class FormularioVenta extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buscarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarButtonMouseClicked
+
+        String codigoProducto = this.codigoProducto.getText();
+        if (StringUtils.isNotEmpty(codigoProducto)) {
+            ServicioDB servicioDB = new ServicioDB();
+            Producto producto = servicioDB.getProducto(codigoProducto);
+            if (producto != null) {
+                this.productoLabel.setText(producto.getNombre());
+                this.precioProducto.setText(producto.getValor().toString());
+                this.cantidadProductos.setText(NumberUtils.numberToString(producto.getStock()));
+                this.cantidad = producto.getStock();
+
+                this.idProducto = producto.getId();
+                this.nombreProducto = producto.getNombre();
+            } else {
+                JOptionPane.showMessageDialog(precioProducto, "Codigo no cohincide con ningún producto");
+            }
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buscarButtonMouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+
+        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        menuPrincipal.setVisible(true);
+        menuPrincipal.setLocationRelativeTo(null);
+        this.dispose();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments

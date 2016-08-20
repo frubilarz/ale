@@ -14,33 +14,47 @@ import org.slf4j.LoggerFactory;
  * @author frubilar
  */
 public abstract class NumberUtils implements Serializable {
-    
+
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(NumberUtils.class);
-    
+
     public static Integer NumberUtils(String numero) {
         Integer numeroInt = null;
         try {
             if (StringUtils.isNotEmpty(numero)) {
-             numeroInt = Integer.parseInt(numero);
+                numeroInt = Integer.parseInt(numero);
             }
         } catch (Exception e) {
             numeroInt = null;
-            logger.debug("Error al intentar parsear un string a numero: {}",e.toString(),e);
-            logger.error("Error al intentar parsear un string a numero: {}",e.toString());
+            logger.debug("Error al intentar parsear un string a numero: {}", e.toString(), e);
+            logger.error("Error al intentar parsear un string a numero: {}", e.toString());
         }
         return numeroInt;
     }
-    
-    public static Float numberFloat(String numero){
-        Float numeroFloat= null;
+
+    public static String numberToString(Integer numero) {
+        String numeroString = null;
         try {
-            if(StringUtils.isNotEmpty(numero)){
+            if (numero != null) {
+                numeroString = Integer.toString(numero);
+            }
+        } catch (Exception e) {
+            numeroString = null;
+            logger.debug("Error al intentar parsear un numero a String: {}", e.toString(), e);
+            logger.error("Error al intentar parsear un numero a String: {}", e.toString());
+        }
+        return numeroString;
+    }
+
+    public static Float numberFloat(String numero) {
+        Float numeroFloat = null;
+        try {
+            if (StringUtils.isNotEmpty(numero)) {
                 numeroFloat = Float.parseFloat(numero);
             }
         } catch (Exception e) {
-            numeroFloat= null;
-            logger.debug("Error al intentar parsear un string a float: {}",e.toString(),e);
-            logger.error("Error al intentar parsear un string a float: {}",e.toString());
+            numeroFloat = null;
+            logger.debug("Error al intentar parsear un string a float: {}", e.toString(), e);
+            logger.error("Error al intentar parsear un string a float: {}", e.toString());
         }
         return numeroFloat;
     }
