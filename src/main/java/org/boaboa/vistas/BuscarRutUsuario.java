@@ -24,6 +24,11 @@ public class BuscarRutUsuario extends javax.swing.JFrame {
     public BuscarRutUsuario() {
         initComponents();
     }
+    
+    public BuscarRutUsuario(Usuario usuario){
+        usuarioMenu = usuario;
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -119,7 +124,7 @@ public class BuscarRutUsuario extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(rootPane,"Nuevo Usuario");
             }
-            FormularioUsuario formularioUsuario = new FormularioUsuario(usuario,this.usuarioMenu);
+            FormularioUsuario formularioUsuario = new FormularioUsuario(rut,usuario,this.usuarioMenu);
             formularioUsuario.setVisible(true);
             formularioUsuario.setLocationRelativeTo(null);
             this.dispose();

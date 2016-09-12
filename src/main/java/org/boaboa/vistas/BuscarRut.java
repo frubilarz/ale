@@ -27,6 +27,12 @@ public class BuscarRut extends javax.swing.JFrame {
         initComponents();
     }
 
+        
+    public BuscarRut(Usuario usuario) {
+        usuarioBuscarRut = usuario;
+        initComponents();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,6 +73,11 @@ public class BuscarRut extends javax.swing.JFrame {
         jLabel2.setText("BUSCAR CLIENTE");
 
         atrasBoton.setText("ATRAS");
+        atrasBoton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                atrasBotonMouseClicked(evt);
+            }
+        });
         atrasBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atrasBotonActionPerformed(evt);
@@ -148,6 +159,10 @@ public class BuscarRut extends javax.swing.JFrame {
     private void buscarButonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarButonMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_buscarButonMouseClicked
+
+    private void atrasBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atrasBotonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_atrasBotonMouseClicked
 
     /**
      * @param args the command line arguments

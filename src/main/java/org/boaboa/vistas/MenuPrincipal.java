@@ -236,7 +236,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
 
-        BuscarRut buscarRut = new BuscarRut();
+        BuscarRut buscarRut = new BuscarRut(this.usuarioMenu);
         buscarRut.setVisible(true);
         buscarRut.setLocationRelativeTo(null);
         this.dispose();
@@ -245,7 +245,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
 
-        BuscarRut buscarRut = new BuscarRut();
+        BuscarRut buscarRut = new BuscarRut(this.usuarioMenu);
         buscarRut.setVisible(true);
         buscarRut.setLocationRelativeTo(null);
         this.dispose();
@@ -267,7 +267,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (usuarioMenu != null) {
             if (usuarioMenu.getRol().equals("admin")) {
-                BuscarRutUsuario buscarRutUsuario = new BuscarRutUsuario();
+                BuscarRutUsuario buscarRutUsuario = new BuscarRutUsuario(this.usuarioMenu);
                 buscarRutUsuario.setVisible(true);
                 buscarRutUsuario.setLocationRelativeTo(null);
                 this.dispose();

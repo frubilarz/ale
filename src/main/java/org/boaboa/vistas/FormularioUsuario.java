@@ -27,16 +27,18 @@ public class FormularioUsuario extends javax.swing.JFrame {
         initComponents();
     }
 
-    FormularioUsuario(Usuario usuario, Usuario secion) {
+    FormularioUsuario(Integer rut,Usuario usuario, Usuario secion) {
         initComponents();
         this.usuarioPersistir=secion;
         if (usuario != null) {
-            this.usuarioPersistir = usuario;
+            this.usuarioFormulario = usuario;
             usuarioFormulario = usuario;
             this.nombreField.setText(usuarioFormulario.getNombre().toString());
             if (usuarioFormulario.getRut() != null) {
                 this.rutField.setText(RutUtils.formatear(usuarioFormulario.getRut()));
             }
+        }else{
+            this.rutField.setText(RutUtils.formatear(rut));
         }
     }
 
@@ -53,7 +55,6 @@ public class FormularioUsuario extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         nombreField = new javax.swing.JTextField();
         confirmacionPassword = new javax.swing.JPasswordField();
-        rutField = new javax.swing.JTextField();
         rolBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         Password = new javax.swing.JPasswordField();
@@ -63,18 +64,13 @@ public class FormularioUsuario extends javax.swing.JFrame {
         atrasButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        rutField = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel6.setText("CONFIRMACION");
 
         jLabel7.setText("DE CLAVE");
-
-        rutField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rutFieldActionPerformed(evt);
-            }
-        });
 
         rolBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Vendedor", "Administrador" }));
 
@@ -106,6 +102,8 @@ public class FormularioUsuario extends javax.swing.JFrame {
         jLabel4.setText("ROL");
 
         jLabel5.setText(" CLAVE");
+
+        rutField.setText("jLabel8");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,13 +137,18 @@ public class FormularioUsuario extends javax.swing.JFrame {
                                     .addComponent(confirmacionPassword)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(59, 59, 59)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rutField)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(rolBox, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(Password))))))
+                                        .addGap(59, 59, 59)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(rolBox, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(Password)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(63, 63, 63)
+                                        .addComponent(rutField)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -168,7 +171,7 @@ public class FormularioUsuario extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rutField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(rutField))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,10 +195,6 @@ public class FormularioUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rutFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rutFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rutFieldActionPerformed
-
     private void atrasButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atrasButtonMouseClicked
 
         MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioPersistir);
@@ -208,7 +207,7 @@ public class FormularioUsuario extends javax.swing.JFrame {
 
     private void guardarButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarButtonMouseClicked
 
-        String nombre = this.nombreField.getText();
+        String nombreString = this.nombreField.getText();
         String rutString = this.rutField.getText();
         String rol = this.rolBox.getSelectedItem().toString();
         char[] palabra, palabra2;
@@ -217,21 +216,21 @@ public class FormularioUsuario extends javax.swing.JFrame {
         String clave = new String(palabra);
         String clave2 = new String(palabra2);
         if (clave.equals(clave2)) {
-            if (nombre.length() * rutString.length() * clave.length() != 0) {
+            if (nombreString.length() * rutString.length() * clave.length() != 0) {
                 Integer rutInteger = RutUtils.parseRut(rutString);
                 if (rutInteger != null) {
 
-                    usuarioFormulario.setNombre(nombre);
+                    this.usuarioFormulario.setNombre(nombreString);
                     if (rol.equals("Administrador")) {
                         rol = "admin";
                     }
-                    usuarioFormulario.setRol(rol);
-                    if (usuarioFormulario.getId() == null) {
-                        usuarioFormulario.setRut(rutInteger);
+                    this.usuarioFormulario.setRol(rol);
+                    if (this.usuarioFormulario.getId() == null) {
+                        this.usuarioFormulario.setRut(rutInteger);
                     }
-                    usuarioFormulario.setClave(SecurityUtils.sha256(clave));
+                    this.usuarioFormulario.setClave(SecurityUtils.sha256(clave));
                     ServicioDB servicioDB = new ServicioDB();
-                    boolean salida = servicioDB.guardar(usuarioFormulario);
+                    boolean salida = servicioDB.guardar(this.usuarioFormulario);
                     if (salida) {
                         JOptionPane.showMessageDialog(rootPane, "se guardara un usuario nuevo");
                         MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioPersistir);
@@ -307,6 +306,6 @@ public class FormularioUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField nombreField;
     private javax.swing.JComboBox rolBox;
-    private javax.swing.JTextField rutField;
+    private javax.swing.JLabel rutField;
     // End of variables declaration//GEN-END:variables
 }
