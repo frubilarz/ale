@@ -19,6 +19,8 @@ public class BuscarRutUsuario extends javax.swing.JFrame {
     /**
      * Creates new form BuscarRutUsuario
      */
+    Usuario usuarioMenu = new Usuario();
+    
     public BuscarRutUsuario() {
         initComponents();
     }
@@ -117,7 +119,7 @@ public class BuscarRutUsuario extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(rootPane,"Nuevo Usuario");
             }
-            FormularioUsuario formularioUsuario = new FormularioUsuario(usuario);
+            FormularioUsuario formularioUsuario = new FormularioUsuario(usuario,this.usuarioMenu);
             formularioUsuario.setVisible(true);
             formularioUsuario.setLocationRelativeTo(null);
             this.dispose();
@@ -133,7 +135,7 @@ public class BuscarRutUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_rutField1ActionPerformed
 
     private void atrasBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBotonActionPerformed
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioMenu);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();

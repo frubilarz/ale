@@ -7,6 +7,7 @@ package org.boaboa.vistas;
 
 import javax.swing.JOptionPane;
 import org.boaboa.modelos.Cliente;
+import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.RutUtils;
 
@@ -19,6 +20,9 @@ public class BuscarRut extends javax.swing.JFrame {
     /**
      * Creates new form BuscarRut
      */
+    Usuario usuarioBuscarRut = new Usuario();
+ 
+    
     public BuscarRut() {
         initComponents();
     }
@@ -41,6 +45,11 @@ public class BuscarRut extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         buscarButon.setText("Buscar");
+        buscarButon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buscarButonMouseClicked(evt);
+            }
+        });
         buscarButon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buscarButonActionPerformed(evt);
@@ -113,7 +122,7 @@ public class BuscarRut extends javax.swing.JFrame {
             ServicioDB servicioDB = new ServicioDB();
             Cliente cliente = servicioDB.getClientePorRut(rut);
             if(cliente!=null){
-                ClienteMostrar clienteMostrar = new ClienteMostrar(cliente);
+                ClienteMostrar clienteMostrar = new ClienteMostrar(cliente,this.usuarioBuscarRut);
                 clienteMostrar.setVisible(true);
                 clienteMostrar.setLocationRelativeTo(null);
                 this.dispose();
@@ -130,11 +139,15 @@ public class BuscarRut extends javax.swing.JFrame {
     }//GEN-LAST:event_buscarButonActionPerformed
 
     private void atrasBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBotonActionPerformed
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioBuscarRut);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_atrasBotonActionPerformed
+
+    private void buscarButonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarButonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buscarButonMouseClicked
 
     /**
      * @param args the command line arguments

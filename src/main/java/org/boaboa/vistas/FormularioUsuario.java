@@ -17,7 +17,8 @@ import org.boaboa.utils.SecurityUtils;
  */
 public class FormularioUsuario extends javax.swing.JFrame {
 
-    Usuario usuarioFormulario;
+    Usuario usuarioFormulario = null;
+    Usuario usuarioPersistir = new Usuario();
 
     /**
      * Creates new form formularioUsuario
@@ -26,9 +27,11 @@ public class FormularioUsuario extends javax.swing.JFrame {
         initComponents();
     }
 
-    FormularioUsuario(Usuario usuario) {
+    FormularioUsuario(Usuario usuario, Usuario secion) {
         initComponents();
+        this.usuarioPersistir=secion;
         if (usuario != null) {
+            this.usuarioPersistir = usuario;
             usuarioFormulario = usuario;
             this.nombreField.setText(usuarioFormulario.getNombre().toString());
             if (usuarioFormulario.getRut() != null) {
@@ -195,7 +198,7 @@ public class FormularioUsuario extends javax.swing.JFrame {
 
     private void atrasButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atrasButtonMouseClicked
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioPersistir);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
@@ -231,7 +234,7 @@ public class FormularioUsuario extends javax.swing.JFrame {
                     boolean salida = servicioDB.guardar(usuarioFormulario);
                     if (salida) {
                         JOptionPane.showMessageDialog(rootPane, "se guardara un usuario nuevo");
-                        MenuPrincipal menuPrincipal = new MenuPrincipal();
+                        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioPersistir);
                         menuPrincipal.setVisible(true);
                         menuPrincipal.setLocationRelativeTo(null);
                         this.dispose();

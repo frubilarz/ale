@@ -24,12 +24,14 @@ public class FormularioCliente extends javax.swing.JFrame {
     Cliente cliente = new Cliente();
     Usuario usuario = new Usuario();
     
+    
     public FormularioCliente() {
         initComponents();
     }
 
-    FormularioCliente(Cliente c) {
+    FormularioCliente(Cliente c, Usuario u) {
         initComponents();
+        this.usuario=u;
         this.cliente = c;
         this.nombreField.setText(c.getNombre());
         this.rutField.setText(RutUtils.formatear(c.getRut()));
@@ -40,7 +42,7 @@ public class FormularioCliente extends javax.swing.JFrame {
 
     FormularioCliente(Usuario usuarioMenu) {
         initComponents();
-        usuario = usuarioMenu;
+        this.usuario = usuarioMenu;
     }
 
     @SuppressWarnings("unchecked")
@@ -176,7 +178,7 @@ public class FormularioCliente extends javax.swing.JFrame {
 
     private void atrasBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBotonActionPerformed
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuario);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
@@ -211,7 +213,7 @@ public class FormularioCliente extends javax.swing.JFrame {
             salida = servicioDB.guardar(cliente);
             if (salida == true) {
                 JOptionPane.showMessageDialog(rootPane, "cliente guardado con exito");
-                MenuPrincipal menuPrincipal = new MenuPrincipal();
+                MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuario);
                 menuPrincipal.setVisible(true);
                 menuPrincipal.setLocationRelativeTo(null);
                 this.dispose();

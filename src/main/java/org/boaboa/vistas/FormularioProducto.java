@@ -7,6 +7,7 @@ package org.boaboa.vistas;
 
 import javax.swing.JOptionPane;
 import org.boaboa.modelos.Producto;
+import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
 
@@ -25,10 +26,14 @@ public class FormularioProducto extends javax.swing.JFrame {
 
     Producto productoForm = null;
 
-    FormularioProducto(Producto producto, String codigo) {
+    Usuario usuarioFormularioProducto = new Usuario();
+    
+    
+    FormularioProducto(Producto producto, String codigo, Usuario usuario) {
         initComponents();
         this.productoForm = producto;
         this.codigoLabel.setText(codigo);
+        this.usuarioFormularioProducto = usuario;
         if (producto != null) {
             this.nombreField.setText(producto.getNombre());
             this.valorField.setText(producto.getValor().toString());
@@ -184,7 +189,7 @@ public class FormularioProducto extends javax.swing.JFrame {
 
     private void atrasBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBotonActionPerformed
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioFormularioProducto);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
@@ -214,13 +219,13 @@ public class FormularioProducto extends javax.swing.JFrame {
             if (salida) {
                 if (productoForm.getId() != null) {
                     JOptionPane.showMessageDialog(rootPane, "Actualizado con exito");
-                    MenuPrincipal principal = new MenuPrincipal();
+                    MenuPrincipal principal = new MenuPrincipal(this.usuarioFormularioProducto);
                     principal.setVisible(true);
                     principal.setLocationRelativeTo(null);
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "Guardado con exito nuevo producto");
-                    MenuPrincipal principal = new MenuPrincipal();
+                    MenuPrincipal principal = new MenuPrincipal(this.usuarioFormularioProducto);
                     principal.setVisible(true);
                     principal.setLocationRelativeTo(null);
                     this.dispose();

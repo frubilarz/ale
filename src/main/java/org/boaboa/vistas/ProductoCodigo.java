@@ -8,6 +8,7 @@ package org.boaboa.vistas;
 import javax.swing.JOptionPane;
 import org.apache.commons.lang.StringUtils;
 import org.boaboa.modelos.Producto;
+import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 
 /**
@@ -19,7 +20,14 @@ public class ProductoCodigo extends javax.swing.JFrame {
     /**
      * Creates new form ProductoCodigo
      */
+    Usuario productoUsuario = new Usuario();
+    
     public ProductoCodigo() {
+        initComponents();
+    }
+
+    ProductoCodigo(Usuario usuarioMenu) {
+        this.productoUsuario = usuarioMenu;
         initComponents();
     }
 
@@ -51,6 +59,11 @@ public class ProductoCodigo extends javax.swing.JFrame {
         jLabel2.setText("codigo");
 
         atrasBoton.setText("ATRAS");
+        atrasBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atrasBotonActionPerformed(evt);
+            }
+        });
 
         buscarButon.setText("Buscar");
         buscarButon.addActionListener(new java.awt.event.ActionListener() {
@@ -114,7 +127,7 @@ public class ProductoCodigo extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(rootPane, "Producto Nuevo");
             }
-            FormularioProducto formularioProducto = new FormularioProducto(producto,codigo);
+            FormularioProducto formularioProducto = new FormularioProducto(producto,codigo,this.productoUsuario);
             formularioProducto.setVisible(true);
             formularioProducto.setLocationRelativeTo(null);
             this.dispose();
@@ -123,6 +136,13 @@ public class ProductoCodigo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "no ha introducido un codigo");
         }
     }//GEN-LAST:event_buscarButonActionPerformed
+
+    private void atrasBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBotonActionPerformed
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.productoUsuario);
+        menuPrincipal.setVisible(true);
+        menuPrincipal.setLocationRelativeTo(null);
+        this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_atrasBotonActionPerformed
 
     /**
      * @param args the command line arguments

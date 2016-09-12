@@ -136,11 +136,11 @@ public class Login extends javax.swing.JFrame {
         } else {
             if (rutInteger != null) {
                 ServicioDB servicioDB = new ServicioDB();
-                Usuario respuesta = new Usuario();
-                respuesta = servicioDB.getUsuario(rutInteger);
-                if (respuesta != null) {
-                    if (respuesta.getClave().equals(SecurityUtils.sha256(clave))) {
-                        MenuPrincipal menuPrincipal = new MenuPrincipal(respuesta);
+                Usuario usuario = new Usuario();
+                usuario = servicioDB.getUsuario(rutInteger);
+                if (usuario != null) {
+                    if (usuario.getClave().equals(SecurityUtils.sha256(clave))) {
+                        MenuPrincipal menuPrincipal = new MenuPrincipal(usuario);
                         menuPrincipal.setVisible(true);
                         menuPrincipal.setLocationRelativeTo(null);
                         this.dispose();

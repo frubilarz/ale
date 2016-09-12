@@ -7,6 +7,7 @@ package org.boaboa.vistas;
 
 import javax.swing.JOptionPane;
 import org.boaboa.modelos.Cliente;
+import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.RutUtils;
 
@@ -21,14 +22,16 @@ public class ClienteMostrar extends javax.swing.JFrame {
      */
     
     Cliente c = null;
+    Usuario usuarioClienteMostrar = new Usuario();
     
     public ClienteMostrar() {
         initComponents();
     }
 
-    ClienteMostrar(Cliente cliente) {
+    ClienteMostrar(Cliente cliente,Usuario usuario) {
         initComponents();
         this.c = cliente;
+        this.usuarioClienteMostrar = usuario;
         this.AtributoNombre.setText(cliente.getNombre());
         this.AtributoCorreo.setText(cliente.getCorreo());
         this.AtributoDireccion.setText(cliente.getDireccion());
@@ -175,7 +178,7 @@ public class ClienteMostrar extends javax.swing.JFrame {
 
     private void MenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuButtonActionPerformed
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuarioClienteMostrar);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
@@ -189,7 +192,7 @@ public class ClienteMostrar extends javax.swing.JFrame {
         if(rutBoolean){
             Integer rut = RutUtils.parseRut(rutString);
             ServicioDB servicioDB = new  ServicioDB();
-            FormularioCliente crearCliente = new FormularioCliente(c);
+            FormularioCliente crearCliente = new FormularioCliente(c,this.usuarioClienteMostrar);
             crearCliente.setVisible(true);
             crearCliente.setLocationRelativeTo(null);
             this.dispose();

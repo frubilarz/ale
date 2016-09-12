@@ -83,7 +83,7 @@ COLLATE = utf8_spanish_ci;
 DROP TABLE IF EXISTS boletas cascade;
 create TABLE boletas(
     id int not null auto_increment,
-    fecha datetime not null default now(),
+    fecha datetime not null,
     monto double default 0 not null,
     local_id int,
     usuario_id int,
@@ -122,7 +122,7 @@ COLLATE = utf8_spanish_ci;
 drop table if exists pagos;
 create table pagos(
     id int(11) not null auto_increment,
-    fecha datetime default now() not null,
+    fecha datetime  not null,
     cliente_id int,
     monto int default 0 not null,
     FOREIGN KEY (cliente_id) 

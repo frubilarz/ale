@@ -219,7 +219,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu3ActionPerformed
 
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
-        FormularioCliente crearUsuario = new FormularioCliente(usuarioMenu);
+        FormularioCliente crearUsuario = new FormularioCliente(this.usuarioMenu);
         crearUsuario.setVisible(true);
         crearUsuario.setLocationRelativeTo(null);
         this.dispose();
@@ -257,7 +257,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_nombreLabelMouseClicked
 
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
-        ProductoCodigo productoCodigo = new ProductoCodigo();
+        ProductoCodigo productoCodigo = new ProductoCodigo(this.usuarioMenu);
         productoCodigo.setVisible(true);
         productoCodigo.setLocationRelativeTo(null);
         this.dispose();        // TODO add your handling code here:
