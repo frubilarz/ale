@@ -6,7 +6,10 @@
 package org.boaboa.vistas;
 
 import javax.swing.JOptionPane;
+import org.boaboa.modelos.Cliente;
 import org.boaboa.modelos.Usuario;
+import org.boaboa.servicio.ServicioDB;
+import org.boaboa.utils.RutUtils;
 
 /**
  *
@@ -274,7 +277,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(rootPane, "No eres un Usuario Administrador");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(rootPane, "No se puede ingresar No existe usuario Logeado");
         }
         // TODO add your handling code here:
@@ -302,16 +305,39 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jMenu9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu9MouseClicked
 
-        FormularioVenta formularioVenta = new FormularioVenta();
-        formularioVenta.setVisible(true);
-        formularioVenta.setLocationRelativeTo(null);
-        this.dispose();
-        
+        Integer valor = JOptionPane.showInternalConfirmDialog(rootPane, "Cliente con rut");
+        if (valor == 0) {
+            String rut = JOptionPane.showInputDialog(null, "Ingrese rut cliente");
+            Integer rutInteger = RutUtils.parseRut(rut);
+            if (rutInteger != null) {
+                ServicioDB servicioDB = new ServicioDB();
+                Cliente cliente = servicioDB.getClientePorRut(rutInteger);
+                if (cliente == null) {
+                    FormularioCliente crearUsuario = new FormularioCliente(this.usuarioMenu);
+                    crearUsuario.setVisible(true);
+                    crearUsuario.setLocationRelativeTo(null);
+                    this.dispose();
+                } else {
+                    FormularioVenta formularioVenta = new FormularioVenta(usuarioMenu, cliente);
+                    formularioVenta.setVisible(true);
+                    formularioVenta.setLocationRelativeTo(null);
+                    this.dispose();
+                }
+            }
+        }
+        if (valor == 1) {
+            FormularioVenta formularioVenta = new FormularioVenta(usuarioMenu);
+            formularioVenta.setVisible(true);
+            formularioVenta.setLocationRelativeTo(null);
+            this.dispose();
+        }
+
 // TODO add your handling code here:
     }//GEN-LAST:event_jMenu9MouseClicked
 
     private void jMenu9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu9ActionPerformed
-        // TODO add your handling code here:
+
+// TODO add your handling code here:
     }//GEN-LAST:event_jMenu9ActionPerformed
 
     /**

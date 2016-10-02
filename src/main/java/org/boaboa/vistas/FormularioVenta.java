@@ -5,11 +5,20 @@
  */
 package org.boaboa.vistas;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import org.apache.commons.lang.StringUtils;
+import org.boaboa.modelos.Boleta;
+import org.boaboa.modelos.CarroVenta;
+import org.boaboa.modelos.Cliente;
 import org.boaboa.modelos.Producto;
+import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
+import org.boaboa.utils.RutUtils;
 
 /**
  *
@@ -20,10 +29,36 @@ public class FormularioVenta extends javax.swing.JFrame {
     /**
      * Creates new form FormularioVenta
      */
+    Integer suma = 0;
+    String sumaString;
     Integer cantidad = 0;
     Integer idProducto;
     String nombreProducto;
+    DefaultTableModel defaultTableModel;
+    Usuario session = new Usuario();
+    Producto consultaProducto = new Producto();
+    List<CarroVenta> carros = new ArrayList<CarroVenta>();
+    Cliente clientefiado = null;
+    public FormularioVenta(Usuario usuario) {
+        this.session = usuario;
+        initComponents();
+        String cabecera[] = {"Producto", "Cantidad", "Precio Unitario", "Precio Total"};
+        String dats[][] = {};
+        defaultTableModel = new DefaultTableModel(dats, cabecera);
+        jTable.setModel(defaultTableModel);
 
+    }
+    public FormularioVenta(Usuario usuario, Cliente cliente) {
+        this.session = usuario;
+        this.clientefiado = cliente;
+        initComponents();
+        String cabecera[] = {"Producto", "Cantidad", "Precio Unitario", "Precio Total"};
+        String dats[][] = {};
+        defaultTableModel = new DefaultTableModel(dats, cabecera);
+        jTable.setModel(defaultTableModel);
+
+    }
+    
     public FormularioVenta() {
         initComponents();
     }
@@ -46,7 +81,7 @@ public class FormularioVenta extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         precioProducto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         totalLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
@@ -71,7 +106,7 @@ public class FormularioVenta extends javax.swing.JFrame {
 
         jLabel4.setText("Precio Unidad");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -82,13 +117,18 @@ public class FormularioVenta extends javax.swing.JFrame {
                 "Producto", "Cantidad", "Precio Unitario", "Precio Total"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable);
 
-        totalLabel.setText("$$$$$");
+        totalLabel.setText("0");
 
         jLabel6.setText("TOTAL");
 
         jButton2.setText("GUARDAR");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("ATRAS");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -96,8 +136,18 @@ public class FormularioVenta extends javax.swing.JFrame {
                 jButton3MouseClicked(evt);
             }
         });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         ingresarButton.setText("Ingresar");
+        ingresarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresarButtonActionPerformed(evt);
+            }
+        });
 
         productoLabel.setText("NOMBRE PRODUCTO");
 
@@ -115,7 +165,7 @@ public class FormularioVenta extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 374, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel6)
@@ -144,7 +194,7 @@ public class FormularioVenta extends javax.swing.JFrame {
                             .addComponent(codigoProducto))
                         .addGap(18, 18, 18))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addComponent(precioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -196,6 +246,7 @@ public class FormularioVenta extends javax.swing.JFrame {
         if (StringUtils.isNotEmpty(codigoProducto)) {
             ServicioDB servicioDB = new ServicioDB();
             Producto producto = servicioDB.getProducto(codigoProducto);
+            this.consultaProducto = producto;
             if (producto != null) {
                 this.productoLabel.setText(producto.getNombre());
                 this.precioProducto.setText(producto.getValor().toString());
@@ -219,6 +270,73 @@ public class FormularioVenta extends javax.swing.JFrame {
         this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void ingresarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarButtonActionPerformed
+
+        Integer stock = consultaProducto.getStock();
+        Integer cantidadCompra = NumberUtils.NumberUtils(this.cantidadProductos.getText());
+        Float valorProducto = NumberUtils.numberFloat(this.precioProducto.getText());
+        Integer valorInteger = Math.round(valorProducto);
+        if (cantidadCompra != null) {
+            if (valorProducto != null) {
+                if (stock >= cantidadCompra) {
+                    CarroVenta carroVenta = new CarroVenta();
+                    carroVenta.setCantidadProducto(cantidadCompra);
+                    carroVenta.setProducto_id(consultaProducto.getId());
+                    carroVenta.setValor(valorInteger);
+                    this.carros.add(carroVenta);
+                    Integer resultado = cantidadCompra * valorInteger;
+                    String total = NumberUtils.numberToString(resultado);
+                    if (total != null) {
+                        Object fila[] = {consultaProducto.getNombre(), cantidadProductos.getText(), precioProducto.getText(), total};
+                        defaultTableModel.addRow(fila);
+                        suma = NumberUtils.NumberUtils(this.totalLabel.getText());
+                        suma += resultado;
+                        sumaString = NumberUtils.numberToString(suma);
+                        this.totalLabel.setText(sumaString);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(precioProducto, "El stock es de " + consultaProducto.getStock().toString() + " Para este producto");
+                }
+            }
+        }
+// TODO add your handling code here:
+    }//GEN-LAST:event_ingresarButtonActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //guardar(lista)
+
+        Double total = NumberUtils.numberDouble(this.totalLabel.getText());
+        if (total != null) {
+            Boleta boleta = new Boleta();
+            Date fecha = new Date();
+            boleta.setFecha(fecha);
+            boleta.setMonto(total);
+            boleta.setUsuario_id(session.getId());
+            ServicioDB servicioDB = new ServicioDB();
+            boolean salida = servicioDB.guardar(carros, boleta);
+            if (salida == true) {
+                if(this.clientefiado==null){
+                    MenuPrincipal menuPrincipal = new MenuPrincipal();
+                    menuPrincipal.setVisible(true);
+                    menuPrincipal.setLocationRelativeTo(null);
+                    this.dispose();
+                }else{
+                    
+                }
+            }
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        MenuPrincipal menuPrincipal = new MenuPrincipal(session);
+        menuPrincipal.setVisible(true);
+        menuPrincipal.setLocationRelativeTo(null);
+        this.dispose();
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -268,7 +386,7 @@ public class FormularioVenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable;
     private javax.swing.JTextField precioProducto;
     private javax.swing.JLabel productoLabel;
     private javax.swing.JLabel totalLabel;

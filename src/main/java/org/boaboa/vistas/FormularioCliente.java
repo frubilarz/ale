@@ -23,21 +23,28 @@ public class FormularioCliente extends javax.swing.JFrame {
      */
     Cliente cliente = new Cliente();
     Usuario usuario = new Usuario();
-    
-    
+    Integer auxiliar = null;
+
     public FormularioCliente() {
         initComponents();
     }
 
     FormularioCliente(Cliente c, Usuario u) {
         initComponents();
-        this.usuario=u;
+        this.usuario = u;
         this.cliente = c;
         this.nombreField.setText(c.getNombre());
         this.rutField.setText(RutUtils.formatear(c.getRut()));
         this.telefonoField.setText(c.getTelefono().toString());
         this.correoField.setText(c.getCorreo());
         this.direccionField.setText(c.getDireccion());
+    }
+
+    FormularioCliente( Usuario u, Integer valor) {
+        initComponents();
+        this.usuario = u;
+        this.auxiliar = 1;
+
     }
 
     FormularioCliente(Usuario usuarioMenu) {
@@ -187,7 +194,6 @@ public class FormularioCliente extends javax.swing.JFrame {
 
     private void guardarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarBotonActionPerformed
 
-
         cliente.setNombre(this.nombreField.getText());
         cliente.setCorreo(this.correoField.getText());
         cliente.setDireccion(this.direccionField.getText());
@@ -213,9 +219,11 @@ public class FormularioCliente extends javax.swing.JFrame {
             salida = servicioDB.guardar(cliente);
             if (salida == true) {
                 JOptionPane.showMessageDialog(rootPane, "cliente guardado con exito");
-                MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuario);
-                menuPrincipal.setVisible(true);
-                menuPrincipal.setLocationRelativeTo(null);
+                if (auxiliar == null) {
+                    MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuario);
+                    menuPrincipal.setVisible(true);
+                    menuPrincipal.setLocationRelativeTo(null);
+                }
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(rootPane, "vuelva a intentarlo es false");

@@ -45,6 +45,20 @@ public abstract class NumberUtils implements Serializable {
         return numeroString;
     }
 
+    public static Double numberDouble(String numero) {
+        Double salida = null;
+        try {
+            if (StringUtils.isNotEmpty(numero)) {
+                salida = Double.parseDouble(numero);
+            }
+        } catch (Exception e) {
+            salida = null;
+            logger.debug("Error al intentar parsear un string a float: {}", e.toString(), e);
+            logger.error("Error al intentar parsear un string a float: {}", e.toString());
+        }
+        return salida;
+    }
+
     public static Float numberFloat(String numero) {
         Float numeroFloat = null;
         try {

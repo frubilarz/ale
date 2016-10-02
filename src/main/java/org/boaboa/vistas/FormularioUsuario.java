@@ -17,7 +17,7 @@ import org.boaboa.utils.SecurityUtils;
  */
 public class FormularioUsuario extends javax.swing.JFrame {
 
-    Usuario usuarioFormulario = null;
+    Usuario usuarioFormulario = new Usuario();
     Usuario usuarioPersistir = new Usuario();
 
     /**
@@ -27,9 +27,9 @@ public class FormularioUsuario extends javax.swing.JFrame {
         initComponents();
     }
 
-    FormularioUsuario(Integer rut,Usuario usuario, Usuario secion) {
+    FormularioUsuario(Integer rut,Usuario usuario, Usuario usuarioSession) {
         initComponents();
-        this.usuarioPersistir=secion;
+        this.usuarioPersistir=usuarioSession;
         if (usuario != null) {
             this.usuarioFormulario = usuario;
             usuarioFormulario = usuario;

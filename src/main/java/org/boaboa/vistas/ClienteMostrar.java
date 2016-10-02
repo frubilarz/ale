@@ -20,15 +20,14 @@ public class ClienteMostrar extends javax.swing.JFrame {
     /**
      * Creates new form ClienteMostrar
      */
-    
-    Cliente c = null;
+    Cliente c = new Cliente();
     Usuario usuarioClienteMostrar = new Usuario();
-    
+
     public ClienteMostrar() {
         initComponents();
     }
 
-    ClienteMostrar(Cliente cliente,Usuario usuario) {
+    ClienteMostrar(Cliente cliente, Usuario usuario) {
         initComponents();
         this.c = cliente;
         this.usuarioClienteMostrar = usuario;
@@ -38,7 +37,7 @@ public class ClienteMostrar extends javax.swing.JFrame {
         this.AtributoTelefono.setText(cliente.getTelefono().toString());
         this.AtributoRut.setText(RutUtils.formatear(cliente.getRut()));
         this.tituloNombre.setText(cliente.getNombre());
-        
+
     }
 
     /**
@@ -68,6 +67,11 @@ public class ClienteMostrar extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         EliminarButton.setText("Eliminar");
+        EliminarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarButtonActionPerformed(evt);
+            }
+        });
 
         EditarButton.setText("editar cliente");
         EditarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +134,7 @@ public class ClienteMostrar extends javax.swing.JFrame {
                             .addComponent(AtributoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AtributoDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AtributoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 87, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(MenuButton)
@@ -189,18 +193,31 @@ public class ClienteMostrar extends javax.swing.JFrame {
 
         String rutString = this.AtributoRut.getText();
         boolean rutBoolean = RutUtils.isRut(rutString);
-        if(rutBoolean){
+        if (rutBoolean) {
             Integer rut = RutUtils.parseRut(rutString);
-            ServicioDB servicioDB = new  ServicioDB();
-            FormularioCliente crearCliente = new FormularioCliente(c,this.usuarioClienteMostrar);
+            ServicioDB servicioDB = new ServicioDB();
+            FormularioCliente crearCliente = new FormularioCliente(c, this.usuarioClienteMostrar);
             crearCliente.setVisible(true);
             crearCliente.setLocationRelativeTo(null);
             this.dispose();
-            
+
         }
-        
-        
+
+
     }//GEN-LAST:event_EditarButtonActionPerformed
+
+    private void EliminarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarButtonActionPerformed
+
+        ServicioDB servicioDB = new ServicioDB();
+        boolean consulta = servicioDB.eliminar(c);
+        if(consulta==true){
+            JOptionPane.showMessageDialog(rootPane, "Se borro el usuario"+c.getNombre());
+            MenuPrincipal menuPrincipal = new MenuPrincipal(usuarioClienteMostrar);
+            menuPrincipal.setVisible(true);
+            menuPrincipal.setLocationRelativeTo(null);
+            this.dispose();
+        }
+    }//GEN-LAST:event_EliminarButtonActionPerformed
 
     /**
      * @param args the command line arguments

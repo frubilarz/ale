@@ -7,6 +7,7 @@ package org.boaboa.servicio;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import org.boaboa.modelos.Boleta;
+import org.boaboa.modelos.CarroVenta;
 import org.boaboa.modelos.Cliente;
 import org.boaboa.modelos.Producto;
 import org.boaboa.modelos.Usuario;
@@ -101,7 +104,8 @@ public class ServicioDB implements Serializable {
             logger.info("ERROR: conexión aún activa");
         }
     }
-public boolean guardar(Usuario usuario) {
+
+    public boolean guardar(Usuario usuario) {
         boolean salida = false;
         try {
             if (usuario != null) {
@@ -155,6 +159,33 @@ public boolean guardar(Usuario usuario) {
         return salida;
     }
 
+    public boolean eliminar(Cliente cliente) {
+        boolean salida = false;
+        try {
+            if (cliente != null) {
+                if (!isConectado()) {
+                    conectar();
+                }
+            }
+
+            PreparedStatement st = null;
+            String query = "DELETE FROM clientes WHERE id= ?";
+            st = conexion.prepareStatement(query);
+            if (st != null) {
+                st.setInt(1, cliente.getId());
+                st.execute();
+                st.close();
+                salida = true;
+            }
+
+        } catch (Exception e) {
+            logger.debug("error : {}", e.toString(), e);
+            logger.error("Error : {}", e.toString());
+            salida = false;
+        }
+        return salida;
+    }
+
     public boolean guardar(Cliente cliente) {
         boolean salida = false;
         try {
@@ -183,8 +214,7 @@ public boolean guardar(Usuario usuario) {
                     st.setInt(6, cliente.getId());
 
                 } else {
-                    
-                    
+
                     query = "INSERT INTO clientes (nombre,rut,telefono,correo,direccion)"
                             + " VALUES (?,?,?,?,?)";
                     st = conexion.prepareStatement(query);
@@ -194,7 +224,7 @@ public boolean guardar(Usuario usuario) {
                     st.setInt(3, cliente.getTelefono());
                     st.setString(4, cliente.getCorreo());
                     st.setString(5, cliente.getDireccion());
-                     Integer uno = 1;
+                    Integer uno = 1;
                 }
                 if (st != null) {
                     logger.info(st.toString());
@@ -208,9 +238,70 @@ public boolean guardar(Usuario usuario) {
             }
 
         } catch (Exception e) {
-                salida = false;
+            salida = false;
             logger.debug("error : {}", e.toString(), e);
             logger.error("Error : {}", e.toString());
+        }
+        return salida;
+    }
+
+    public boolean guardar(List<CarroVenta> carroVentas, Boleta boleta) {
+        boolean salida = false;
+        try {
+            if (carroVentas != null) {
+                if (boleta != null) {
+                    if (!isConectado()) {
+                        conectar();
+                    }
+                    PreparedStatement st = null;
+                    String query = "";
+                    query = "INSERT INTO boletas (fecha, monto, usuario_id)"
+                            + " VALUES (NOW(), ?, ?)";
+
+                    st = conexion.prepareStatement(query, new String[]{"id"});
+                    st.setDouble(1, boleta.getMonto());
+                    st.setInt(2, boleta.getUsuario_id());
+                    if (st != null) {
+                        logger.info(st.toString());
+                        st.execute();
+                        Integer key = -1;
+                        ResultSet rs = st.getGeneratedKeys(); // para ver el id generado
+                        if (rs != null && rs.next()) {
+                            key = rs.getInt(1);
+                        }
+                        int updateCount = st.getUpdateCount();
+                        if (updateCount > 0) {
+                            salida = true;
+                        }
+                        for (CarroVenta carro : carroVentas) {
+                            PreparedStatement st2 = null;
+                            String query2 = "";
+                            query = "INSERT INTO carros_ventas (producto_id, boleta_id, cantidad,valor)"
+                                    + " VALUES (?,?, ?, ?)";
+
+                            st = conexion.prepareStatement(query);
+                            Producto producto = getProducto(carro.getProducto_id());
+                            Integer diferencia= producto.getStock()-carro.getCantidadProducto();
+                            producto.setStock(diferencia);
+                            guardar(producto);
+                            st.setInt(1, carro.getProducto_id());
+                            st.setInt(2, key);
+                            st.setInt(3, carro.getCantidadProducto());
+                            st.setInt(4, carro.getValor());
+                            if (st != null) {
+                                logger.info(st.toString());
+                                st.execute();
+                                int updateCount2 = st.getUpdateCount();
+                                if (updateCount2 > 0) {
+                                    salida = true;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
         }
         return salida;
     }
@@ -349,6 +440,7 @@ public boolean guardar(Usuario usuario) {
         }
         return cliente;
     }
+
     public Usuario getUsuario(Integer rut) {
         Usuario usuario = null;
         try {
@@ -425,6 +517,45 @@ public boolean guardar(Usuario usuario) {
         return producto;
     }
     
+    
+    public Producto getProducto(Integer id) {
+        Producto producto = null;
+        try {
+            if (id != null) {
+                if (!isConectado()) {
+                    conectar();
+                }
+                PreparedStatement st = null;
+                String query = "SELECT * FROM productos WHERE id = ?";
+                st = conexion.prepareStatement(query);
+                if (st != null) {
+                    st.setInt(1, id);
+
+                    ResultSet rs = st.executeQuery();
+                    if (rs != null) {
+                        if (rs.next()) {
+                            producto = new Producto();
+                            producto.setId(rs.getInt("id"));
+                            producto.setNombre(rs.getString("nombre"));
+                            producto.setCodigo(rs.getString("codigo"));
+                            producto.setDescripcion(rs.getString("descripcion"));
+                            producto.setStock(rs.getInt("stock"));
+                            producto.setValor(rs.getFloat("valor"));
+                        }
+                        rs.close();
+                    }
+                    st.close();
+                }
+
+            }
+        } catch (Exception e) {
+            producto = null;
+            logger.debug("Error al intentar obtener cliente por id : {}", e.toString(), e);
+            logger.error("Error al intentar obtener cliente por id : {}", e.toString());
+        }
+        return producto;
+    }
+
     public List<Cliente> getClientes() {
         List<Cliente> clientes = new ArrayList<Cliente>();
         try {
@@ -438,8 +569,8 @@ public boolean guardar(Usuario usuario) {
                 ResultSet rs = st.executeQuery();
                 if (rs != null) {
                     while (rs.next()) {
-                        Cliente cliente = new Cliente(); 
-                        
+                        Cliente cliente = new Cliente();
+
                         cliente.setId(rs.getInt("id"));
                         cliente.setDireccion(rs.getString("direccion"));
                         cliente.setCorreo(rs.getString("correo"));
