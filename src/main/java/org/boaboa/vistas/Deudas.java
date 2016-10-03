@@ -6,6 +6,7 @@
 
 package org.boaboa.vistas;
 
+import org.boaboa.modelos.Cliente;
 import org.boaboa.modelos.Usuario;
 
 /**
@@ -15,6 +16,7 @@ import org.boaboa.modelos.Usuario;
 public class Deudas extends javax.swing.JFrame {
 
     Usuario usuariodeuda = new Usuario();
+    Cliente clientedeuda = new Cliente();
     /**
      * Creates new form Deudas
      */
@@ -22,10 +24,16 @@ public class Deudas extends javax.swing.JFrame {
         initComponents();
     }
     
-    public Deudas(Usuario usuario)
+    public Deudas(Usuario usuario,Cliente cliente)
     {
         usuariodeuda=usuario;
+        clientedeuda= cliente;
         initComponents();
+    }
+    public Deudas (Usuario usuacio,Cliente cliente)
+    {
+        
+        
     }
 
     /**

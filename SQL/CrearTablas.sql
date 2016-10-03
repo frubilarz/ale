@@ -85,15 +85,15 @@ create TABLE boletas(
     id int not null auto_increment,
     fecha datetime not null,
     monto double default 0 not null,
-    local_id int,
     usuario_id int,
-    FOREIGN KEY (local_id) 
-        REFERENCES locales(id)
-        ON DELETE CASCADE,
+    cliente_id int,
     FOREIGN KEY (usuario_id) 
         REFERENCES usuarios(id)
         ON DELETE CASCADE,
-    primary key(id)
+    FOREIGN KEY (cliente_id) 
+        REFERENCES clientes(id)
+        ON DELETE CASCADE,
+        primary key(id)
 )ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_spanish_ci;
@@ -159,12 +159,12 @@ create table deudas(
     id int(11) not null auto_increment,
     monto int default 0 not null,
     pago_id int,
-    carro_fiado_id int,
+    cliente_id int,
     FOREIGN KEY (pago_id) 
         REFERENCES pagos(id)
         ON DELETE CASCADE,
-    FOREIGN KEY (carro_fiado_id) 
-        REFERENCES carros_fiados(id)
+    FOREIGN KEY (cliente_id) 
+        REFERENCES clientes(id)
         ON DELETE CASCADE,
         primary key(id)
 )

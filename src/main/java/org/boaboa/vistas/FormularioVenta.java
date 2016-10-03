@@ -39,6 +39,7 @@ public class FormularioVenta extends javax.swing.JFrame {
     Producto consultaProducto = new Producto();
     List<CarroVenta> carros = new ArrayList<CarroVenta>();
     Cliente clientefiado = null;
+    
     public FormularioVenta(Usuario usuario) {
         this.session = usuario;
         initComponents();
