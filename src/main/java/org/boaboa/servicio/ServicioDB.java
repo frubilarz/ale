@@ -19,6 +19,7 @@ import javax.annotation.PreDestroy;
 import org.boaboa.modelos.Boleta;
 import org.boaboa.modelos.CarroVenta;
 import org.boaboa.modelos.Cliente;
+import org.boaboa.modelos.Deuda;
 import org.boaboa.modelos.Producto;
 import org.boaboa.modelos.Usuario;
 import org.slf4j.Logger;
@@ -159,6 +160,56 @@ public class ServicioDB implements Serializable {
         return salida;
     }
 
+    public boolean guardar(Deuda deuda) {
+        boolean salida = false;
+        try {
+            if (deuda != null) {
+                if (!isConectado()) {
+                    conectar();
+                }
+                boolean update = false;
+                if (deuda.getId() != null) {
+                    if (deuda.getId() > 0) {
+                        update = true;
+                    }
+                }
+                PreparedStatement st = null;
+                String query = "";
+
+                if (update) {
+                    query = "UPDATE deudas SET monto=?, cliente_id=? "
+                            + "WHERE id = ?";
+                    st = conexion.prepareStatement(query);
+                    st.setInt(1, deuda.getMonto());
+                    st.setInt(2, deuda.getCliente_id());
+                    st.setInt(3, deuda.getId());
+                } else {
+                    query = "INSERT INTO deudas (monto,cliente_id)"
+                            + " VALUES (?, ?)";
+                    st = conexion.prepareStatement(query);
+
+                    st.setInt(1, deuda.getMonto());
+                    st.setInt(2, deuda.getCliente_id());
+                }
+                if (st != null) {
+                    logger.info(st.toString());
+                    st.execute();
+
+                    int updateCount = st.getUpdateCount();
+                    if (updateCount > 0) {
+                        salida = true;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            salida = false;
+            logger.debug("error : {}", e.toString(), e);
+            logger.error("Error : {}", e.toString());
+        }
+        return salida;
+    }
+
     public boolean eliminar(Cliente cliente) {
         boolean salida = false;
         try {
@@ -245,7 +296,7 @@ public class ServicioDB implements Serializable {
         return salida;
     }
 
-    public boolean guardar(List<CarroVenta> carroVentas, Boleta boleta) {
+    public boolean guardar(List<CarroVenta> carroVentas, Boleta boleta, Cliente cliente) {
         boolean salida = false;
         try {
             if (carroVentas != null) {
@@ -255,12 +306,36 @@ public class ServicioDB implements Serializable {
                     }
                     PreparedStatement st = null;
                     String query = "";
-                    query = "INSERT INTO boletas (fecha, monto, usuario_id)"
-                            + " VALUES (NOW(), ?, ?)";
+                    if (cliente == null) {
+                        query = "INSERT INTO boletas (fecha, monto, usuario_id)"
+                                + " VALUES (NOW(), ?, ?)";
+                        st = conexion.prepareStatement(query, new String[]{"id"});
+                        st.setDouble(1, boleta.getMonto());
+                        st.setInt(2, boleta.getUsuario_id());
+                    } else {
+                        query = "INSERT INTO boletas (fecha, monto, usuario_id,cliente_id)"
+                                + " VALUES (NOW(), ?, ?,?)";
+                        st = conexion.prepareStatement(query, new String[]{"id"});
+                        st.setDouble(1, boleta.getMonto());
+                        st.setInt(2, boleta.getUsuario_id());
+                        st.setInt(3, cliente.getId());
+                        
+                        Deuda deuda = getDeuda(cliente);
+                        
+                        if (deuda == null) {
+                            deuda = new Deuda();
+                            Integer monto = boleta.getMonto().intValue();
+                            deuda.setCliente_id(cliente.getId());
+                           
+                            deuda.setMonto(monto);
+                            guardar(deuda);
+                        } else {
+                            Integer NuevoMonto = boleta.getMonto().intValue() + deuda.getMonto();
+                            deuda.setMonto(NuevoMonto);
+                            guardar(deuda);
+                        }
+                    }
 
-                    st = conexion.prepareStatement(query, new String[]{"id"});
-                    st.setDouble(1, boleta.getMonto());
-                    st.setInt(2, boleta.getUsuario_id());
                     if (st != null) {
                         logger.info(st.toString());
                         st.execute();
@@ -281,7 +356,7 @@ public class ServicioDB implements Serializable {
 
                             st = conexion.prepareStatement(query);
                             Producto producto = getProducto(carro.getProducto_id());
-                            Integer diferencia= producto.getStock()-carro.getCantidadProducto();
+                            Integer diferencia = producto.getStock() - carro.getCantidadProducto();
                             producto.setStock(diferencia);
                             guardar(producto);
                             st.setInt(1, carro.getProducto_id());
@@ -361,6 +436,39 @@ public class ServicioDB implements Serializable {
             logger.error("Error : {}", e.toString());
         }
         return salida;
+    }
+
+    public Deuda getDeuda(Cliente cliente) {
+        Deuda deuda = null;
+        try {
+            if (cliente != null) {
+
+                if (!isConectado()) {
+                    conectar();
+                }
+                PreparedStatement st = null;
+                String query = "SELECT * FROM deudas WHERE cliente_id = ?";
+                st = conexion.prepareStatement(query);
+                if (st != null) {
+                    st.setInt(1, cliente.getId());
+
+                    ResultSet rs = st.executeQuery();
+                    if (rs != null) {
+                        if (rs.next()) {
+                            deuda = new Deuda();
+                            deuda.setCliente_id(rs.getInt("cliente_id"));
+                            deuda.setMonto(rs.getInt(rs.getInt("monto")));
+
+                        }
+                        rs.close();
+                    }
+                    st.close();
+                }
+
+            }
+        } catch (Exception e) {
+        }
+        return deuda;
     }
 
     public Cliente getCliente(Integer id) {
@@ -516,8 +624,7 @@ public class ServicioDB implements Serializable {
         }
         return producto;
     }
-    
-    
+
     public Producto getProducto(Integer id) {
         Producto producto = null;
         try {

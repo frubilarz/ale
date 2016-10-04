@@ -18,7 +18,7 @@ public class Boleta extends BaseBean{
     Integer id = null;
     Date fecha = null;
     Double monto = null;
-    Integer local_id = null;
+    Integer cliente_id = null;
     Integer usuario_id = null;
 
     public Integer getUsuario_id() {
@@ -58,11 +58,11 @@ public class Boleta extends BaseBean{
     }
 
     public Integer getLocal_id() {
-        return local_id;
+        return cliente_id;
     }
 
     public void setLocal_id(Integer local_id) {
-        this.local_id = local_id;
+        this.cliente_id = local_id;
     }
 
     @Override

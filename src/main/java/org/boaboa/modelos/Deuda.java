@@ -15,7 +15,7 @@ public class Deuda {
     Integer id= null;
     Integer monto = null;
     Integer pago_id = null;
-    Integer carro_fiado_id = null;
+    Integer cliente_id = null;
 
     public Deuda() {
     }
@@ -44,12 +44,12 @@ public class Deuda {
         this.pago_id = pago_id;
     }
 
-    public Integer getCarro_fiado_id() {
-        return carro_fiado_id;
+    public Integer getCliente_id() {
+        return cliente_id;
     }
 
-    public void setCarro_fiado_id(Integer carro_fiado_id) {
-        this.carro_fiado_id = carro_fiado_id;
+    public void setCliente_id(Integer carro_fiado_id) {
+        this.cliente_id = carro_fiado_id;
     }
     
     

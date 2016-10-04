@@ -38,8 +38,8 @@ public class FormularioVenta extends javax.swing.JFrame {
     Usuario session = new Usuario();
     Producto consultaProducto = new Producto();
     List<CarroVenta> carros = new ArrayList<CarroVenta>();
-    Cliente clientefiado = null;
-    
+    Cliente clienteFiado = null;
+
     public FormularioVenta(Usuario usuario) {
         this.session = usuario;
         initComponents();
@@ -49,17 +49,17 @@ public class FormularioVenta extends javax.swing.JFrame {
         jTable.setModel(defaultTableModel);
 
     }
+
     public FormularioVenta(Usuario usuario, Cliente cliente) {
         this.session = usuario;
-        this.clientefiado = cliente;
+        this.clienteFiado = cliente;
         initComponents();
         String cabecera[] = {"Producto", "Cantidad", "Precio Unitario", "Precio Total"};
         String dats[][] = {};
         defaultTableModel = new DefaultTableModel(dats, cabecera);
         jTable.setModel(defaultTableModel);
-
     }
-    
+
     public FormularioVenta() {
         initComponents();
     }
@@ -315,15 +315,18 @@ public class FormularioVenta extends javax.swing.JFrame {
             boleta.setMonto(total);
             boleta.setUsuario_id(session.getId());
             ServicioDB servicioDB = new ServicioDB();
-            boolean salida = servicioDB.guardar(carros, boleta);
+            boolean salida = servicioDB.guardar(carros, boleta, this.clienteFiado);
             if (salida == true) {
-                if(this.clientefiado==null){
+                if (this.clienteFiado == null) {
                     MenuPrincipal menuPrincipal = new MenuPrincipal();
                     menuPrincipal.setVisible(true);
                     menuPrincipal.setLocationRelativeTo(null);
                     this.dispose();
-                }else{
-                    
+                } else {
+                    AbonoCliente abonoCliente = new AbonoCliente(session, clienteFiado);
+                    abonoCliente.setVisible(true);
+                    abonoCliente.setLocationRelativeTo(null);
+                    this.dispose();
                 }
             }
         }
