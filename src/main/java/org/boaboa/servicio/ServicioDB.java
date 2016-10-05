@@ -377,6 +377,7 @@ public class ServicioDB implements Serializable {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return salida;
     }
@@ -449,15 +450,17 @@ public class ServicioDB implements Serializable {
                 PreparedStatement st = null;
                 String query = "SELECT * FROM deudas WHERE cliente_id = ?";
                 st = conexion.prepareStatement(query);
-                if (st != null) {
+                if (st != null) 
+                {
                     st.setInt(1, cliente.getId());
 
                     ResultSet rs = st.executeQuery();
                     if (rs != null) {
                         if (rs.next()) {
                             deuda = new Deuda();
+                            deuda.setId(rs.getInt("id"));
                             deuda.setCliente_id(rs.getInt("cliente_id"));
-                            deuda.setMonto(rs.getInt(rs.getInt("monto")));
+                            deuda.setMonto(rs.getInt("monto"));
 
                         }
                         rs.close();
