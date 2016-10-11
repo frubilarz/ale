@@ -100,6 +100,7 @@
     <Component class="javax.swing.JTextField" name="rutField">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rutFieldActionPerformed"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="rutFieldKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="clavePassword">

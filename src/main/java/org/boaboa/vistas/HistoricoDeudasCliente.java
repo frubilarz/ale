@@ -3,10 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.boaboa.vistas;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import org.boaboa.modelos.Cliente;
+import org.boaboa.modelos.Deuda;
+import org.boaboa.modelos.Pago;
 import org.boaboa.modelos.Usuario;
+import org.boaboa.servicio.ServicioDB;
 
 /**
  *
@@ -14,17 +19,45 @@ import org.boaboa.modelos.Usuario;
  */
 public class HistoricoDeudasCliente extends javax.swing.JFrame {
 
-    Usuario usuarioHistorico = new Usuario();
+    Usuario session = new Usuario();
+    Cliente clienteHistorico = new Cliente();
+    DefaultTableModel defaultTableModel;
+
     /**
      * Creates new form HistoricoDeudasCliente
      */
     public HistoricoDeudasCliente() {
         initComponents();
     }
-    
+
     public HistoricoDeudasCliente(Usuario usuario) {
-        usuario= usuarioHistorico;
+        usuario = session;
         initComponents();
+    }
+
+    public HistoricoDeudasCliente(Usuario usuario, Cliente cliente) {
+        initComponents();
+        this.session = usuario;
+        this.clienteHistorico = cliente;
+        this.nombreLabel.setText(this.clienteHistorico.getNombre());
+        ServicioDB servicioDB = new ServicioDB();
+        Deuda deuda = servicioDB.getDeuda(cliente);
+        if(cliente!=null){
+            montoLabel.setText(deuda.getMonto().toString());
+        }
+        List<Pago> pagos = servicioDB.getPagos(cliente.getId());
+        String cabecera[] = {"Fecha", "Monto"};
+        String dats[][] = {};
+        defaultTableModel = new DefaultTableModel(dats, cabecera);
+        jTable.setModel(defaultTableModel);
+        if (pagos != null) {
+            for (Pago pago: pagos) {
+                
+                Object fila[] = {pago.getFecha().toString(),pago.getMonto().toString()};
+                defaultTableModel.addRow(fila);
+            }
+        }
+
     }
 
     /**
@@ -37,7 +70,7 @@ public class HistoricoDeudasCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         historicoLabel = new javax.swing.JLabel();
@@ -47,7 +80,7 @@ public class HistoricoDeudasCliente extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -58,7 +91,7 @@ public class HistoricoDeudasCliente extends javax.swing.JFrame {
                 "Fecha", "Monto"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable);
 
         jButton1.setText("Abonar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -135,16 +168,20 @@ public class HistoricoDeudasCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        AbonoCliente abonar = new AbonoCliente(this.session, this.clienteHistorico);
+        abonar.setVisible(true);
+        abonar.setLocationRelativeTo(null);
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal(usuarioHistorico);
+        MenuPrincipal menuPrincipal = new MenuPrincipal(session);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
-              
+
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -189,7 +226,7 @@ public class HistoricoDeudasCliente extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable;
     private javax.swing.JLabel montoLabel;
     private javax.swing.JLabel nombreLabel;
     // End of variables declaration//GEN-END:variables

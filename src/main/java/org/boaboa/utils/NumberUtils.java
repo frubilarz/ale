@@ -6,6 +6,7 @@
 package org.boaboa.utils;
 
 import java.io.Serializable;
+import javax.swing.JLabel;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 
@@ -72,4 +73,5 @@ public abstract class NumberUtils implements Serializable {
         }
         return numeroFloat;
     }
+
 }

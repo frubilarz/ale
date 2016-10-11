@@ -5,7 +5,10 @@
  */
 package org.boaboa.vistas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.RutUtils;
@@ -16,6 +19,7 @@ import org.boaboa.utils.SecurityUtils;
  * @author Alexandra Olivares Solis
  */
 public class Login extends javax.swing.JFrame {
+
 
     /**
      * Creates new form Login
@@ -52,6 +56,11 @@ public class Login extends javax.swing.JFrame {
         rutField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rutFieldActionPerformed(evt);
+            }
+        });
+        rutField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                rutFieldKeyTyped(evt);
             }
         });
 
@@ -160,6 +169,11 @@ public class Login extends javax.swing.JFrame {
         System.exit(0);
         // TODO add your handling code here:
     }//GEN-LAST:event_cancelarBotonActionPerformed
+
+    private void rutFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rutFieldKeyTyped
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_rutFieldKeyTyped
 
     /**
      * @param args the command line arguments

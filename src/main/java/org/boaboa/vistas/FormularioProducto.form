@@ -181,6 +181,9 @@
     <Component class="javax.swing.JTextField" name="nombreField">
     </Component>
     <Component class="javax.swing.JTextField" name="stockField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="stockFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="atrasBoton">
       <Properties>
@@ -204,6 +207,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="valorField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="valorFieldKeyTyped"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

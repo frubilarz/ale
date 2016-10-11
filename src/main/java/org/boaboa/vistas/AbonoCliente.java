@@ -5,11 +5,17 @@
  */
 package org.boaboa.vistas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.boaboa.modelos.Cliente;
 import org.boaboa.modelos.Deuda;
+import org.boaboa.modelos.Pago;
 import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
+import org.boaboa.utils.TecladoUtils;
 
 /**
  *
@@ -17,9 +23,10 @@ import org.boaboa.utils.NumberUtils;
  */
 public class AbonoCliente extends javax.swing.JFrame {
 
-    Usuario usuariodeuda = new Usuario();
+    Usuario session = new Usuario();
     Cliente clientedeuda = new Cliente();
     Deuda deuda = new Deuda();
+    Pago pago = new Pago();
 
     /**
      * Creates new form Deudas
@@ -30,11 +37,11 @@ public class AbonoCliente extends javax.swing.JFrame {
 
     public AbonoCliente(Usuario usuario, Cliente cliente) {
         initComponents();
-        this.usuariodeuda = usuario;
+        this.session = usuario;
         this.clientedeuda = cliente;
         ServicioDB servicioDB = new ServicioDB();
         this.deuda = servicioDB.getDeuda(cliente);
-        this.nombreCliente.setText(cliente.getNombre().toString());
+        this.nombreCliente.setText(cliente.getNombre());
         String monto = NumberUtils.numberToString(deuda.getMonto());
         if (monto != null) {
             this.DeudaLabel.setText(monto);
@@ -80,6 +87,12 @@ public class AbonoCliente extends javax.swing.JFrame {
         deudaAlaFecha.setText("Deuda");
 
         jLabel2.setText("Abono");
+
+        AbonoField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                AbonoFieldKeyTyped(evt);
+            }
+        });
 
         DeudaLabel.setText("0");
 
@@ -141,7 +154,7 @@ public class AbonoCliente extends javax.swing.JFrame {
 
     private void menuBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBotonActionPerformed
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal(this.usuariodeuda);
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.session);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
@@ -150,8 +163,32 @@ public class AbonoCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_menuBotonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        Integer abono = NumberUtils.NumberUtils(this.AbonoField.getText());
+        Integer monto = (deuda.getMonto() - abono);
+        deuda.setMonto(monto);
+        pago.setMonto(abono);
+        pago.setCliente_id(this.clientedeuda.getId());
+        ServicioDB servicioDB = new ServicioDB();
+        boolean deudaActualizada = servicioDB.guardar(deuda);
+        boolean pagoGenerado = servicioDB.guardar(pago);
+        if (pagoGenerado && deudaActualizada) {
+            JOptionPane.showMessageDialog(menuBoton, "Pago guardado con exito");
+            MenuPrincipal menuPrincipal = new MenuPrincipal(session);
+            menuPrincipal.setVisible(true);
+            menuPrincipal.setLocationRelativeTo(null);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(menuBoton, "No se pudo guardar el pago, vuelva a intentarlo");
+        }
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void AbonoFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AbonoFieldKeyTyped
+        TecladoUtils.soloNumeros(AbonoField);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AbonoFieldKeyTyped
 
     /**
      * @param args the command line arguments
@@ -180,6 +217,12 @@ public class AbonoCliente extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -198,4 +241,5 @@ public class AbonoCliente extends javax.swing.JFrame {
     private javax.swing.JButton menuBoton;
     private javax.swing.JLabel nombreCliente;
     // End of variables declaration//GEN-END:variables
+
 }

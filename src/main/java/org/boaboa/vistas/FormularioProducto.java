@@ -5,17 +5,23 @@
  */
 package org.boaboa.vistas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.boaboa.modelos.Producto;
 import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
+import org.boaboa.utils.TecladoUtils;
 
 /**
  *
  * @author Alexandra Olivares Solis
  */
 public class FormularioProducto extends javax.swing.JFrame {
+
+    
 
     /**
      * Creates new form FormularioProducto
@@ -27,8 +33,7 @@ public class FormularioProducto extends javax.swing.JFrame {
     Producto productoForm = null;
 
     Usuario usuarioFormularioProducto = new Usuario();
-    
-    
+
     FormularioProducto(Producto producto, String codigo, Usuario usuario) {
         initComponents();
         this.productoForm = producto;
@@ -84,6 +89,12 @@ public class FormularioProducto extends javax.swing.JFrame {
         descripcionArea.setRows(5);
         jScrollPane1.setViewportView(descripcionArea);
 
+        stockField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                stockFieldKeyTyped(evt);
+            }
+        });
+
         atrasBoton.setText("ATRAS");
         atrasBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,6 +110,12 @@ public class FormularioProducto extends javax.swing.JFrame {
         });
 
         jLabel6.setText("Valor");
+
+        valorField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                valorFieldKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,6 +253,17 @@ public class FormularioProducto extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_guardarBotonActionPerformed
+
+    private void stockFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stockFieldKeyTyped
+        TecladoUtils.soloNumeros(valorField);
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_stockFieldKeyTyped
+
+    private void valorFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valorFieldKeyTyped
+        TecladoUtils.soloNumeros(valorField);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_valorFieldKeyTyped
 
     /**
      * @param args the command line arguments

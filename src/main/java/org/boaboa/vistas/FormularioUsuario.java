@@ -10,6 +10,7 @@ import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.RutUtils;
 import org.boaboa.utils.SecurityUtils;
+import org.boaboa.utils.TecladoUtils;
 
 /**
  *
@@ -71,6 +72,12 @@ public class FormularioUsuario extends javax.swing.JFrame {
         jLabel6.setText("CONFIRMACION");
 
         jLabel7.setText("DE CLAVE");
+
+        nombreField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nombreFieldKeyTyped(evt);
+            }
+        });
 
         rolBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Vendedor", "Administrador" }));
 
@@ -256,6 +263,12 @@ public class FormularioUsuario extends javax.swing.JFrame {
     private void guardarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_guardarButtonActionPerformed
+
+    private void nombreFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombreFieldKeyTyped
+
+        TecladoUtils.Sonletras(nombreField);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombreFieldKeyTyped
 
     /**
      * @param args the command line arguments

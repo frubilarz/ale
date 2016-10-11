@@ -20,6 +20,7 @@ import org.boaboa.modelos.Boleta;
 import org.boaboa.modelos.CarroVenta;
 import org.boaboa.modelos.Cliente;
 import org.boaboa.modelos.Deuda;
+import org.boaboa.modelos.Pago;
 import org.boaboa.modelos.Producto;
 import org.boaboa.modelos.Usuario;
 import org.slf4j.Logger;
@@ -319,14 +320,14 @@ public class ServicioDB implements Serializable {
                         st.setDouble(1, boleta.getMonto());
                         st.setInt(2, boleta.getUsuario_id());
                         st.setInt(3, cliente.getId());
-                        
+
                         Deuda deuda = getDeuda(cliente);
-                        
+
                         if (deuda == null) {
                             deuda = new Deuda();
                             Integer monto = boleta.getMonto().intValue();
                             deuda.setCliente_id(cliente.getId());
-                           
+
                             deuda.setMonto(monto);
                             guardar(deuda);
                         } else {
@@ -439,6 +440,58 @@ public class ServicioDB implements Serializable {
         return salida;
     }
 
+    public boolean guardar(Pago pago) {
+        boolean salida = false;
+        try {
+            if (pago != null) {
+                if (!isConectado()) {
+                    conectar();
+                }
+                boolean update = false;
+                if (pago.getId() != null) {
+                    if (pago.getId() > 0) {
+                        update = true;
+                    }
+                }
+                PreparedStatement st = null;
+                String query = "";
+
+                if (update) {
+                    query = "UPDATE pagos SET fecha=now(), cliente_id=? ,monto=?"
+                            + "WHERE id = ?";
+                    st = conexion.prepareStatement(query);
+
+                    st.setInt(1, pago.getCliente_id());
+                    st.setInt(2, pago.getMonto());
+                    st.setInt(3, pago.getId());
+
+                } else {
+                    query = "INSERT INTO pagos (fecha, cliente_id, monto)"
+                            + " VALUES (now(),?,?)";
+                    st = conexion.prepareStatement(query);
+
+                    st.setInt(1, pago.getCliente_id());
+                    st.setInt(2, pago.getMonto());
+                }
+                if (st != null) {
+                    logger.info(st.toString());
+                    st.execute();
+
+                    int updateCount = st.getUpdateCount();
+                    if (updateCount > 0) {
+                        salida = true;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            salida = false;
+            logger.debug("error : {}", e.toString(), e);
+            logger.error("Error : {}", e.toString());
+        }
+        return salida;
+    }
+
     public Deuda getDeuda(Cliente cliente) {
         Deuda deuda = null;
         try {
@@ -450,8 +503,7 @@ public class ServicioDB implements Serializable {
                 PreparedStatement st = null;
                 String query = "SELECT * FROM deudas WHERE cliente_id = ?";
                 st = conexion.prepareStatement(query);
-                if (st != null) 
-                {
+                if (st != null) {
                     st.setInt(1, cliente.getId());
 
                     ResultSet rs = st.executeQuery();
@@ -472,6 +524,120 @@ public class ServicioDB implements Serializable {
         } catch (Exception e) {
         }
         return deuda;
+    }
+
+    public List<Pago> getPagos(Integer cliente_id) {
+        List<Pago> list = new ArrayList<Pago>();
+        try {
+            if (cliente_id != null) {
+                if (!isConectado()) {
+                    conectar();
+                }
+
+                PreparedStatement st = null;
+                String query = "SELECT * FROM pagos where cliente_id = ?  order by fecha desc";
+                st = conexion.prepareStatement(query);
+                st.setInt(1, cliente_id);
+                if (st != null) {
+                    ResultSet rs = st.executeQuery();
+                    if (rs != null) {
+                        while (rs.next()) {
+                            Pago pago = new Pago();
+
+                            pago.setId(rs.getInt("id"));
+                            pago.setCliente_id(rs.getInt("cliente_id"));
+                            pago.setFecha(rs.getDate("fecha"));
+                            pago.setMonto(rs.getInt("monto"));
+
+                            list.add(pago);
+                        }
+                        rs.close();
+                    }
+                    st.close();
+                }
+            }
+
+        } catch (Exception e) {
+            list = new ArrayList<Pago>();
+
+        }
+        return list;
+    }
+
+    public List<Boleta> getBoletas(java.util.Date fecha, java.util.Date fecha2) {
+        List<Boleta> boletas = new ArrayList<Boleta>();
+        try {
+            if (!isConectado()) {
+                conectar();
+            }
+            PreparedStatement st = null;
+            String query = "SELECT SUM(monto), usuario_id FROM boletas "
+                    + "where DATE(fecha) BETWEEN ? AND ?"
+                    + "and  usuario_id in"
+                    + "(select id from usuarios) group by usuario_id";
+
+            st = conexion.prepareStatement(query);
+            if (st != null) {
+                java.sql.Date few = new java.sql.Date(fecha.getTime());
+                java.sql.Date fe = new java.sql.Date(fecha2.getTime());
+                st.setDate(1, few);
+                st.setDate(2, fe);
+                ResultSet rs = st.executeQuery();
+                if (rs != null) {
+                    while (rs.next()) {
+                        Boleta boleta = new Boleta();
+
+                        Double monto = (double) rs.getInt("SUM(monto)");
+                        boleta.setMonto(monto);
+                        boleta.setUsuario_id(rs.getInt("usuario_id"));
+
+                        boletas.add(boleta);
+                    }
+                    rs.close();
+                }
+                st.close();
+            }
+        } catch (Exception e) {
+        }
+        return boletas;
+    }
+
+    public Usuario getUsuarioPorId(Integer id) {
+        Usuario usuario = null;
+        try {
+            if (id != null) {
+                if (!isConectado()) {
+                    conectar();
+                }
+                PreparedStatement st = null;
+                String query = "SELECT * FROM usuarios WHERE id = ?";
+                st = conexion.prepareStatement(query);
+                if (st != null) {
+                    st.setInt(1, id);
+
+                    ResultSet rs = st.executeQuery();
+                    if (rs != null) {
+                        if (rs.next()) {
+                            usuario = new Usuario();
+                            usuario.setClave(rs.getString("clave"));
+                            usuario.setRol(rs.getString("rol"));
+                            usuario.setNombre(rs.getString("nombre"));
+                            usuario.setRut(rs.getInt("rut"));
+                            usuario.setId(rs.getInt("id"));
+
+                        }
+                        rs.close();
+                    }
+                    st.close();
+                }
+
+            }
+        } catch (Exception e) {
+            usuario = null;
+            logger.debug("Error al intentar obtener cliente por id : {}", e.toString(), e);
+            logger.error("Error al intentar obtener cliente por id : {}", e.toString());
+        }
+        return usuario;
     }
 
     public Cliente getCliente(Integer id) {

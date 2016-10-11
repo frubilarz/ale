@@ -53,6 +53,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu9 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
+        jMenu10 = new javax.swing.JMenu();
+        jMenu11 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,6 +177,33 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu6.add(jMenu8);
 
         jMenuBar1.add(jMenu6);
+
+        jMenu10.setText("Finanzas");
+        jMenu10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu10MouseClicked(evt);
+            }
+        });
+        jMenu10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu10ActionPerformed(evt);
+            }
+        });
+
+        jMenu11.setText("VENTA MENSUAL POR VENDEDOR");
+        jMenu11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu11MouseClicked(evt);
+            }
+        });
+        jMenu11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu11ActionPerformed(evt);
+            }
+        });
+        jMenu10.add(jMenu11);
+
+        jMenuBar1.add(jMenu10);
 
         setJMenuBar(jMenuBar1);
 
@@ -340,6 +369,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
 // TODO add your handling code here:
     }//GEN-LAST:event_jMenu9ActionPerformed
 
+    private void jMenu11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu11MouseClicked
+
+        VentaMensual mensual = new VentaMensual(usuarioMenu);
+        mensual.setVisible(true);
+        mensual.setLocationRelativeTo(null);
+        this.dispose();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu11MouseClicked
+
+    private void jMenu11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu11ActionPerformed
+
+        VentaMensual mensual = new VentaMensual(usuarioMenu);
+        mensual.setVisible(true);
+        mensual.setLocationRelativeTo(null);
+        this.dispose();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu11ActionPerformed
+
+    private void jMenu10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu10MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu10MouseClicked
+
+    private void jMenu10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu10ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -378,6 +433,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu10;
+    private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;

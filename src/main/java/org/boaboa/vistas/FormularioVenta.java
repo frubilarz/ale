@@ -5,10 +5,13 @@
  */
 package org.boaboa.vistas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.lang.StringUtils;
 import org.boaboa.modelos.Boleta;
@@ -19,6 +22,7 @@ import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
 import org.boaboa.utils.RutUtils;
+import org.boaboa.utils.TecladoUtils;
 
 /**
  *
@@ -29,6 +33,16 @@ public class FormularioVenta extends javax.swing.JFrame {
     /**
      * Creates new form FormularioVenta
      */
+    public void Nletras(JTextField a) {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume();
+                }
+            }
+        });
+    }
     Integer suma = 0;
     String sumaString;
     Integer cantidad = 0;
@@ -96,7 +110,19 @@ public class FormularioVenta extends javax.swing.JFrame {
 
         jLabel2.setText("Codigo Producto");
 
+        codigoProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                codigoProductoKeyTyped(evt);
+            }
+        });
+
         jLabel3.setText("Cantidad");
+
+        cantidadProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cantidadProductosKeyTyped(evt);
+            }
+        });
 
         buscarButton.setText("Buscar");
         buscarButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -106,6 +132,12 @@ public class FormularioVenta extends javax.swing.JFrame {
         });
 
         jLabel4.setText("Precio Unidad");
+
+        precioProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                precioProductoKeyTyped(evt);
+            }
+        });
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -318,7 +350,7 @@ public class FormularioVenta extends javax.swing.JFrame {
             boolean salida = servicioDB.guardar(carros, boleta, this.clienteFiado);
             if (salida == true) {
                 if (this.clienteFiado == null) {
-                    MenuPrincipal menuPrincipal = new MenuPrincipal();
+                    MenuPrincipal menuPrincipal = new MenuPrincipal(this.session);
                     menuPrincipal.setVisible(true);
                     menuPrincipal.setLocationRelativeTo(null);
                     this.dispose();
@@ -334,13 +366,30 @@ public class FormularioVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        MenuPrincipal menuPrincipal = new MenuPrincipal(session);
+        MenuPrincipal menuPrincipal = new MenuPrincipal(this.session);
         menuPrincipal.setVisible(true);
         menuPrincipal.setLocationRelativeTo(null);
         this.dispose();
 
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void cantidadProductosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cantidadProductosKeyTyped
+
+        Nletras(codigoProducto);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cantidadProductosKeyTyped
+
+    private void precioProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_precioProductoKeyTyped
+
+        Nletras(codigoProducto);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_precioProductoKeyTyped
+
+    private void codigoProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codigoProductoKeyTyped
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_codigoProductoKeyTyped
 
     /**
      * @param args the command line arguments

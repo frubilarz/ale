@@ -6,6 +6,8 @@
 
 package org.boaboa.modelos;
 
+import java.util.Date;
+
 /**
  *
  * @author frubilar
@@ -16,6 +18,7 @@ public class Deuda {
     Integer monto = null;
     Integer pago_id = null;
     Integer cliente_id = null;
+    Date fecha = null;
 
     public Deuda() {
     }
@@ -51,6 +54,14 @@ public class Deuda {
     public void setCliente_id(Integer carro_fiado_id) {
         this.cliente_id = carro_fiado_id;
     }
-    
-    
+    public void setFecha(Date fecha_pago)
+    {
+        this.fecha = fecha_pago;
+    }
+    public Date getFecha()
+    {
+        return fecha;
+    } 
 }
+    
+

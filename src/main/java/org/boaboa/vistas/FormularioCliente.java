@@ -11,6 +11,7 @@ import org.boaboa.modelos.Usuario;
 import org.boaboa.servicio.ServicioDB;
 import org.boaboa.utils.NumberUtils;
 import org.boaboa.utils.RutUtils;
+import org.boaboa.utils.TecladoUtils;
 
 /**
  *
@@ -76,6 +77,12 @@ public class FormularioCliente extends javax.swing.JFrame {
         jLabel2.setText("CREAR CLIENTE");
 
         nombreLabel.setText("NOMBRE");
+
+        nombreField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nombreFieldKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("RUT");
 
@@ -233,6 +240,12 @@ public class FormularioCliente extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_guardarBotonActionPerformed
+
+    private void nombreFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombreFieldKeyTyped
+
+        TecladoUtils.Sonletras(nombreField);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombreFieldKeyTyped
 
     /**
      * @param args the command line arguments
